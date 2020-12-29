@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "assert": "^1.5.0",
+    "browserify": "^17.0.0",
+    "jquery": "^3.5.1",
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-browserify": "^1.11.0-pre-seelio"
+  },
+  "devDependencies": {
+    "three": "^0.124.0"
+  }
+}
