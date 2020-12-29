@@ -1,7 +1,7 @@
 const THREE = require('three');
 
 
-class three_interface {
+class ThreeInterface {
 
 	constructor(){
 
