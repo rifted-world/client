@@ -34,4 +34,4 @@ class ThreeInterface {
 
 }
 
-module.exports = three_interface;
+module.exports = ThreeInterface;

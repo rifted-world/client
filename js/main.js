@@ -1,20 +1,24 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var $ = require('jquery'); 
 require("jquery-ui-browserify");
-const three_interface= require("./modules/three_interface");
+const three_interface= require("./modules/ThreeInterface");
+
+let { ws } = require("./modules/uplink");
 
 $(document).ready(function(){
 	console.log("ready");
-	const TI = new three_interface;
-	TI.init();
+	//const TI = new ThreeInterface; 
+	//TI.init();
+
+	ws();
 	
 })
 
-},{"./modules/three_interface":2,"jquery":5,"jquery-ui-browserify":4}],2:[function(require,module,exports){
+},{"./modules/ThreeInterface":2,"./modules/uplink":3,"jquery":6,"jquery-ui-browserify":5}],2:[function(require,module,exports){
 const THREE = require('three');
 
 
-class three_interface {
+class ThreeInterface {
 
 	constructor(){
 
@@ -47,8 +51,38 @@ class three_interface {
 
 }
 
-module.exports = three_interface;
-},{"three":6}],3:[function(require,module,exports){
+module.exports = ThreeInterface;
+},{"three":7}],3:[function(require,module,exports){
+
+function ws(){
+	var connection = new WebSocket('ws://localhost:8080', ['soap', 'xmpp']);
+
+	connection.onopen = function () {
+
+	connection.send('Ping'); // Send the message 'Ping' to the server
+	};
+
+	function test(){
+	st = window.performance.now();
+	connection.send('Ping/test'); // Send the message 'Ping' to the server
+	}
+	// Log errors
+	connection.onerror = function (error) {
+	console.log('WebSocket Error ' + error);
+	};
+
+	// Log messages from the server
+	connection.onmessage = function (e) {
+	
+	console.log('Server ' + e.data);
+
+	};
+}
+
+module.exports = {
+	ws,
+}
+},{}],4:[function(require,module,exports){
 /*! jQuery UI - v1.11.0pre - 2013-09-27
 * http://jqueryui.com
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.ui.effect.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.effect-blind.js, jquery.ui.effect-bounce.js, jquery.ui.effect-clip.js, jquery.ui.effect-drop.js, jquery.ui.effect-explode.js, jquery.ui.effect-fade.js, jquery.ui.effect-fold.js, jquery.ui.effect-highlight.js, jquery.ui.effect-puff.js, jquery.ui.effect-pulsate.js, jquery.ui.effect-scale.js, jquery.ui.effect-shake.js, jquery.ui.effect-size.js, jquery.ui.effect-slide.js, jquery.ui.effect-transfer.js, jquery.ui.menu.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.spinner.js, jquery.ui.tabs.js, jquery.ui.tooltip.js
@@ -15154,10 +15188,10 @@ $.widget( "ui.tooltip", {
 
 }( jQuery ) );*/
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 $ = jQuery = require('jquery');
 module.exports = require('./dist/jquery-ui.js');
-},{"./dist/jquery-ui.js":3,"jquery":5}],5:[function(require,module,exports){
+},{"./dist/jquery-ui.js":4,"jquery":6}],6:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.5.1
  * https://jquery.com/
@@ -26031,7 +26065,7 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // threejs.org/license
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :

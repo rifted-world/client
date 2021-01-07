@@ -8,5 +8,23 @@
   },
   "devDependencies": {
     "three": "^0.124.0"
-  }
+  },
+  "name": "client",
+  "description": "![Gitter](https://img.shields.io/gitter/room/rifted-world/community?style=plastic) ![Discord](https://img.shields.io/discord/793546949626298379?color=7700ff&label=Discord&style=plastic)",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify ./appdev/app.js > ./js/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rifted-world/client.git"
+  },
+  "author": "Janick Koder",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rifted-world/client/issues"
+  },
+  "homepage": "https://github.com/rifted-world/client#readme"
 }

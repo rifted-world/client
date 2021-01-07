@@ -1,8 +1,5 @@
 console.log("run");
 
-
-
-
 var manager = nipplejs.create(options);
 var st;
 var connection = new WebSocket('ws://localhost:8080', ['soap', 'xmpp']);
