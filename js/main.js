@@ -2,7 +2,7 @@
 var $ = require('jquery'); 
 require("jquery-ui-browserify");
 const three_interface= require("./modules/ThreeInterface");
-
+const dev_menu = require("./modules/devmenu");
 let { ws } = require("./modules/uplink");
 
 $(document).ready(function(){
@@ -10,11 +10,13 @@ $(document).ready(function(){
 	//const TI = new ThreeInterface; 
 	//TI.init();
 
+    dev_menu.show();
+
 	ws();
 	
 })
 
-},{"./modules/ThreeInterface":2,"./modules/uplink":3,"jquery":6,"jquery-ui-browserify":5}],2:[function(require,module,exports){
+},{"./modules/ThreeInterface":2,"./modules/devmenu":3,"./modules/uplink":4,"jquery":7,"jquery-ui-browserify":6}],2:[function(require,module,exports){
 const THREE = require('three');
 
 
@@ -52,7 +54,26 @@ class ThreeInterface {
 }
 
 module.exports = ThreeInterface;
-},{"three":7}],3:[function(require,module,exports){
+},{"three":8}],3:[function(require,module,exports){
+
+function show(){
+  $( function() {
+    $( "#tabs" ).tabs({
+      beforeLoad: function( event, ui ) {
+        ui.jqXHR.fail(function() {
+          ui.panel.html(
+            "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+            "If this wouldn't be a demo." );
+        });
+      }
+    });
+  } );
+}
+
+module.exports  = {
+	show
+}
+},{}],4:[function(require,module,exports){
 
 function ws(){
 	var connection = new WebSocket('ws://localhost:8080', ['soap', 'xmpp']);
@@ -82,7 +103,7 @@ function ws(){
 module.exports = {
 	ws,
 }
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /*! jQuery UI - v1.11.0pre - 2013-09-27
 * http://jqueryui.com
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.ui.effect.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.effect-blind.js, jquery.ui.effect-bounce.js, jquery.ui.effect-clip.js, jquery.ui.effect-drop.js, jquery.ui.effect-explode.js, jquery.ui.effect-fade.js, jquery.ui.effect-fold.js, jquery.ui.effect-highlight.js, jquery.ui.effect-puff.js, jquery.ui.effect-pulsate.js, jquery.ui.effect-scale.js, jquery.ui.effect-shake.js, jquery.ui.effect-size.js, jquery.ui.effect-slide.js, jquery.ui.effect-transfer.js, jquery.ui.menu.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.spinner.js, jquery.ui.tabs.js, jquery.ui.tooltip.js
@@ -15188,10 +15209,10 @@ $.widget( "ui.tooltip", {
 
 }( jQuery ) );*/
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 $ = jQuery = require('jquery');
 module.exports = require('./dist/jquery-ui.js');
-},{"./dist/jquery-ui.js":4,"jquery":6}],6:[function(require,module,exports){
+},{"./dist/jquery-ui.js":5,"jquery":7}],7:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.5.1
  * https://jquery.com/
@@ -26065,7 +26086,7 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 // threejs.org/license
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
