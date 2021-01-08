@@ -1,4 +1,5 @@
 var $ = require('jquery'); 
+//window.jQuery = $ = require("jquery");
 require("jquery-ui-browserify");
 const three_interface= require("./modules/ThreeInterface");
 const dev_menu = require("./modules/devmenu");

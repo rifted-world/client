@@ -13,3 +13,12 @@ html, body {
     width: 100%;
     height: 100%;
 }
+.hidden{
+	display: none;
+}
+.maticon {
+    width: 2em;
+}
+.debug_close, .debug_button{
+	cursor: pointer;
+}
