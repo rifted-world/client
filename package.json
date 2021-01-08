@@ -7,17 +7,15 @@
     "jquery-ui": "^1.12.1",
     "jquery-ui-browserify": "^1.11.0-pre-seelio"
   },
-    "browserify-shim": {
-      "jquery": "global:$",
-      "three": "global:THREE"
-      
+  "browserify-shim": {
+    "jquery": "global:$",
+    "three": "global:THREE"
   },
   "browserify": {
     "transform": [
-        "browserify-shim"
-      ]
+      "browserify-shim"
+    ]
   },
-
   "devDependencies": {
     "three": "^0.124.0"
   },
@@ -25,7 +23,6 @@
   "description": "![Gitter](https://img.shields.io/gitter/room/rifted-world/community?style=plastic) ![Discord](https://img.shields.io/discord/793546949626298379?color=7700ff&label=Discord&style=plastic)",
   "version": "0.0.1",
   "main": "index.js",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify ./appdev/app.js > ./js/main.js"

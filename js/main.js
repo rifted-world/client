@@ -5,16 +5,26 @@ var $ = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefi
 require("jquery-ui-browserify");
 const three_interface= require("./modules/ThreeInterface");
 const dev_menu = require("./modules/devmenu");
-let { ws } = require("./modules/uplink");
+let uplink  = require("./modules/uplink");
 
 $(document).ready(function(){
 	console.log("ready");
 	//const TI = new ThreeInterface; 
 	//TI.init();
 
-    dev_menu.show();
+    window.ws = new uplink();
+	window.dev= new dev_menu(ws);
 
-	ws();
+	
+
+
+	dev.show();
+	/*
+	setTimeout(function(){
+		dev.sendchat();
+	},5000)
+	*/
+	//uplink.ws_start();
 	
 })
 
@@ -63,81 +73,127 @@ module.exports = ThreeInterface;
 (function (global){(function (){
 var $ = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null); 
 //Entrypoint
-function show(){
-	$('.debug_button').on('click',function(){
-		$('.debug_menu').toggleClass('hidden');
-	})
-	import_menu()	
-}
 
-function import_menu(){
-	$.ajax({
-		type: "GET",
-		url: "/ajax/devmenu.html",
-		success: function(data){
-			$('.debug_menu').html(data);
+class DevMenu{
+	
+	constructor(uplink){
+		this.uplink = uplink;
+	}
 
-		},
-		complete: load_tabs
-	})
-}
-function load_tabs(){
-	$( "#tabs" ).tabs();
-	$('.preload').each(function(){
-		var elem = $(this);
-		var target = $(this).html();
+	show(){
+		
+		$('.debug_button').on('click',function(){
+			$('.debug_menu').toggleClass('hidden');
+		})
+		this.import_menu()	
+	}
+
+	import_menu(){
 		$.ajax({
 			type: "GET",
-			url: "/ajax/devmenu/"+target+".html",
+			url: "/ajax/devmenu.html",
 			success: function(data){
-				
-				elem.html(data);
-			},
-			complete: function(){
-				$('.debug_close').on('click',function(){
-					$('.debug_menu').toggleClass('hidden');
-					console.log("close");
-				})
-				
-			}
-		})
-	})
-}
+				$('.debug_menu').html(data);
 
-module.exports  = {
-	show
+			},
+			complete: this.load_tabs
+		})
+	}
+	sendchat(){
+		this.uplink.send("senden");
+		console.log("keyup");
+	}
+
+	setkeyup(){
+		$('#chatinput_form').bind("enterKey",function(e){
+			this.uplink.send("senden");
+			console.log("ok");
+		});
+
+		$('#chatinput_form').keyup(function(e){
+			if(e.keyCode == 13)
+			{
+				$(this).trigger("enterKey");
+			}
+		});
+	}
+
+	load_tabs(){
+		$( "#tabs" ).tabs();
+		$('.preload').each(function(){
+			var elem = $(this);
+			var target = $(this).html();
+			$.ajax({
+				type: "GET",
+				url: "/ajax/devmenu/"+target+".html",
+				success: function(data){
+					elem.html(data);
+				},
+				complete: function(){
+					$('#chatinput_form').bind("enterKey",function(e){
+						window.ws.send($('#chatinput_form').val());
+					});
+					$('#chatinput_form').keyup(function(e){
+						if(e.keyCode == 13)
+						{
+							$(this).trigger("enterKey");
+						}
+					});
+				}
+			})
+		})
+	}
+
+	recieve_chat(data){
+		$('#chatdisplay').append("<div class='chatrow'> " + data + "</div>")
+	}
 }
+module.exports  = DevMenu;
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],4:[function(require,module,exports){
-
-function ws(){
-	var connection = new WebSocket('ws://localhost:8080', ['soap', 'xmpp']);
-
-	connection.onopen = function () {
-
-	connection.send('Ping'); // Send the message 'Ping' to the server
-	};
-
-	function test(){
-	st = window.performance.now();
-	connection.send('Ping/test'); // Send the message 'Ping' to the server
-	}
-	// Log errors
-	connection.onerror = function (error) {
-	console.log('WebSocket Error ' + error);
-	};
-
-	// Log messages from the server
-	connection.onmessage = function (e) {
+class Uplink{
 	
-	console.log('Server ' + e.data);
+	constructor(){
+		let connection = new WebSocket('ws://localhost:446', ['soap', 'xmpp']);
+		connection.onopen = function () {
+			connection.send('Ping'); // Send the message 'Ping' to the server
+		};
+		connection.onerror = function (error) {
+			console.log('WebSocket Error ' + error);
+		};
+		connection.onmessage = function (e) {
+			window.dev.recieve_chat(e.data);
+			console.log('Server ' + e.data);
+		};
 
-	};
-}
 
-module.exports = {
-	ws,
+		this.connection = connection;
+	}
+
+	ws_start(){
+		
+
+		// Log errors
+		connection.onerror = function (error) {
+			console.log('WebSocket Error ' + error);
+		};
+
+		// Log messages from the server
+
+	}
+
+	send(data){
+		this.connection.send(data);
+		console.log("test ok")
+	}
+	recieve(){
+
+	}
+	
+
 }
+module.exports = Uplink;
+
 },{}],5:[function(require,module,exports){
 /*! jQuery UI - v1.11.0pre - 2013-09-27
 * http://jqueryui.com

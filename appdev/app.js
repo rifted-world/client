@@ -3,15 +3,25 @@ var $ = require('jquery');
 require("jquery-ui-browserify");
 const three_interface= require("./modules/ThreeInterface");
 const dev_menu = require("./modules/devmenu");
-let { ws } = require("./modules/uplink");
+let uplink  = require("./modules/uplink");
 
 $(document).ready(function(){
 	console.log("ready");
 	//const TI = new ThreeInterface; 
 	//TI.init();
 
-    dev_menu.show();
+    window.ws = new uplink();
+	window.dev= new dev_menu(ws);
 
-	ws();
+	
+
+
+	dev.show();
+	/*
+	setTimeout(function(){
+		dev.sendchat();
+	},5000)
+	*/
+	//uplink.ws_start();
 	
 })
